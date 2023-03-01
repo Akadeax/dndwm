@@ -7,6 +7,7 @@ import 'werewolves_type.dart';
 List<Race> races = [
   Race("Dwarf", "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. Though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller", ["advantage on drinking const rolls"]),
   Race("Elf", "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. Though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller", ["advantage on drinking const rolls"]),
+  Race("Frog","Ribbit",["Ribbit"]),
 ];
 List<Class> classes = [
   Class("Monk","",[0,5,0,0,2,0],"Acrobatics"),
@@ -27,6 +28,7 @@ void main() {
   runApp(const MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -34,19 +36,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'DNDWolves Manager',
-      home: HomeScreen()
+      home: PlayerCreation()
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class PlayerCreation extends StatefulWidget {
+  const PlayerCreation({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<PlayerCreation> createState() => _PlayerCreationState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _PlayerCreationState extends State<PlayerCreation> {
   String? selectedRace;
   String? selectedClass;
   String? selectedRole;
@@ -74,9 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
       selectedRole = null;
       _playerNameController.text = "";
     });
-  }
-  void onFinish() {
-
   }
 
   @override
@@ -147,7 +146,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Container(width: 100, height: 0),
           TextButton(
-              onPressed: onFinish,
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => _Game()),
+                );
+              },
               child: Text("Start the Game")
           ),
         ],
@@ -168,3 +172,148 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+class _Game extends StatefulWidget {
+  const _Game({Key? key}) : super(key: key);
+
+  @override
+  State<_Game> createState() => _GameState();
+}
+
+class _GameState extends State<_Game> {
+  late TextEditingController _damageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _damageController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _damageController.dispose();
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Game"),
+      ),
+      body: Container(
+        height: 400,
+        color: Colors.cyan,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: players.length,
+            itemBuilder: (ctx, i) {
+              return Column(
+                children: [
+                  TextButton(
+                      child: Text(players[i].name),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => _PlayerPage(players[i])),
+                        );
+                      }
+                  ),
+                  SizedBox(
+                    height: 50, width: 100,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      controller: _damageController,
+                        ),
+                  ),
+                  SizedBox(
+                    height: 50, width: 100,
+                    child: TextButton(
+                      child: Text("Damage"),
+                      onPressed: (){
+                        setState(() {
+                         players[i].health -= int.tryParse(_damageController.text) ?? 0;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: 100,
+                    child: Center(child: Text("HP: ${players[i].health}")),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: 100,
+                    child: Center(child : Text("AC: ${players[i].ac}")),
+                  )
+                ],
+              );
+            }
+        ),
+      ),
+    );
+    }
+}
+
+class _PlayerPage extends StatefulWidget {
+  const _PlayerPage(this.player, {Key? key}) : super(key: key);
+  final Player player;
+  @override
+  State<_PlayerPage> createState() => _PlayerPageState();
+}
+
+class _PlayerPageState extends State<_PlayerPage> {
+  String? selectedAction;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.player.name),
+      ),
+      body: Column(
+        children:[
+          DropdownButton<String>(
+            items: const [
+              DropdownMenuItem(child: Text("Frogify"), value: "Frogify"),
+              DropdownMenuItem(child: Text("Revive"), value: "Revive"),
+            ],
+            onChanged:(String? newValue){
+              setState(() {
+                selectedAction = newValue;
+              });
+            },
+            value: selectedAction,
+          ),
+          TextButton(
+            child: Text("Action"),
+            onPressed: (){
+              setState(() {
+                switch (selectedAction){
+                  case "Froggify":
+                    widget.player.race = races.firstWhere((element) => element.name == "Frog");
+                    widget.player.health = 5;
+                    widget.player.ac = 5;
+                    widget.player.hitChanceBonus = 0;
+                    widget.player.strengthBonus = 0;
+                    break;
+                  case "Revive":
+                    widget.player.health = widget.player.role.health;
+                    widget.player.ac = widget.player.role.ac;
+                    widget.player.hitChanceBonus = widget.player.role.hitChanceBonus;
+                    widget.player.strengthBonus = widget.player.role.strengthBonus;
+                    widget.player.race = widget.player.originalRace;
+                    break;
+                }
+              });
+            },
+          ),
+          Container(
+            width: 100,
+            height: 100,
+            child: Text(widget.player.health.toString()),
+          )
+        ]
+      )
+    );
+  }
+}
+

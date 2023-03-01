@@ -7,16 +7,18 @@ class Player{
   Player(this.name,this.race , this.playerClass, this.role) {
     ac = role.ac;
     health = role.health;
-    StrengthBonus = role.strengthBonus;
+    strengthBonus = role.strengthBonus;
     hitChanceBonus = role.hitChanceBonus;
+    originalRace = race;
   }
   String name;
   Race race;
   Class playerClass;
   WerewolvesType role;
 
-  int? ac;
-  int? health;
-  int? StrengthBonus;
-  int? hitChanceBonus;
+  late int ac;
+  late int health;
+  late int strengthBonus;
+  late int hitChanceBonus;
+  late Race originalRace;
 }

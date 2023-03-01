@@ -93,7 +93,7 @@ class _PlayerCreationState extends State<PlayerCreation> {
 
   Widget playerInputRow(BuildContext context) {
     return Container(
-      color: Colors.deepOrangeAccent,
+      color: Colors.cyanAccent,
       child: Row(
         children: [
           Container(
@@ -206,45 +206,50 @@ class _GameState extends State<_Game> {
             scrollDirection: Axis.horizontal,
             itemCount: players.length,
             itemBuilder: (ctx, i) {
-              return Column(
-                children: [
-                  TextButton(
-                      child: Text(players[i].name),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => _PlayerPage(players[i])),
-                        );
-                      }
-                  ),
+              return Row(
+                children:
+                [
                   SizedBox(
                     height: 50, width: 100,
                     child: TextField(
                       keyboardType: TextInputType.number,
                       controller: _damageController,
-                        ),
-                  ),
-                  SizedBox(
-                    height: 50, width: 100,
-                    child: TextButton(
-                      child: Text("Damage"),
-                      onPressed: (){
-                        setState(() {
-                         players[i].health -= int.tryParse(_damageController.text) ?? 0;
-                        });
-                      },
                     ),
                   ),
-                  SizedBox(
-                    height: 50,
-                    width: 100,
-                    child: Center(child: Text("HP: ${players[i].health}")),
+                  Column(
+                    children: [
+                      TextButton(
+                          child: Text(players[i].name),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => _PlayerPage(players[i])),
+                            );
+                          }
+                      ),
+                      SizedBox(
+                        height: 50, width: 100,
+                        child: TextButton(
+                          child: Text("Damage"),
+                          onPressed: (){
+                            setState(() {
+                              players[i].health -= int.tryParse(_damageController.text) ?? 0;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: 100,
+                        child: Center(child: Text("HP: ${players[i].health}")),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: 100,
+                        child: Center(child : Text("AC: ${players[i].ac}")),
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: 50,
-                    width: 100,
-                    child: Center(child : Text("AC: ${players[i].ac}")),
-                  )
                 ],
               );
             }
@@ -263,55 +268,134 @@ class _PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<_PlayerPage> {
   String? selectedAction;
+  late TextEditingController _ExtraInfoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _ExtraInfoController = TextEditingController();
+    _ExtraInfoController.text = widget.player.extraInfo;
+  }
+
+  @override
+  void dispose() {
+    _ExtraInfoController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.player.name),
       ),
-      body: Column(
-        children:[
-          DropdownButton<String>(
-            items: const [
-              DropdownMenuItem(child: Text("Frogify"), value: "Frogify"),
-              DropdownMenuItem(child: Text("Revive"), value: "Revive"),
-            ],
-            onChanged:(String? newValue){
-              setState(() {
-                selectedAction = newValue;
-              });
-            },
-            value: selectedAction,
-          ),
-          TextButton(
-            child: Text("Action"),
-            onPressed: (){
-              setState(() {
-                switch (selectedAction){
-                  case "Froggify":
-                    widget.player.race = races.firstWhere((element) => element.name == "Frog");
-                    widget.player.health = 5;
-                    widget.player.ac = 5;
-                    widget.player.hitChanceBonus = 0;
-                    widget.player.strengthBonus = 0;
-                    break;
-                  case "Revive":
-                    widget.player.health = widget.player.role.health;
-                    widget.player.ac = widget.player.role.ac;
-                    widget.player.hitChanceBonus = widget.player.role.hitChanceBonus;
-                    widget.player.strengthBonus = widget.player.role.strengthBonus;
-                    widget.player.race = widget.player.originalRace;
-                    break;
-                }
-              });
-            },
-          ),
-          Container(
-            width: 100,
-            height: 100,
-            child: Text(widget.player.health.toString()),
-          )
-        ]
+      body: Center(
+        child: Column(
+          children:[
+            Container(
+              width: 100,
+              height: 25,
+              child: Center(child: Text(widget.player.name.toString())),
+            ),
+            Container(
+              width: 100,
+              height: 25,
+              child: Center(child: Text(widget.player.race.name.toString())),
+            ),
+            Container(
+              width: 100,
+              height: 25,
+              child: Center(child: Text(widget.player.playerClass.name.toString())),
+            ),
+            Container(
+              width: 100,
+              height: 50,
+              child: Center(child: Text("health: ${widget.player.health}")),
+            ),
+            Container(
+              width: 100,
+              height: 50,
+              child: Center(child: Text("ac: ${widget.player.ac}")),
+            ),
+            Container(
+              width: 200,
+              height: 50,
+              child: Center(child: Text("hit chance bonus: ${widget.player.hitChanceBonus}")),
+            ),
+            Container(
+              width: 100,
+              height: 50,
+              child: Center(child: Text("Strength: ${widget.player.strengthBonus}")),
+            ),
+            Container(
+              width: 100,
+              height: 50,
+              child: Center(child: Text("Class feature: ${widget.player.playerClass.feature}")),
+            ),
+
+            DropdownButton<String>(
+              items: const [
+                DropdownMenuItem(child: Text("Frogify"), value: "Frogify"),
+                DropdownMenuItem(child: Text("Revive"), value: "Revive"),
+                DropdownMenuItem(child: Text("ReturnForm"), value: "ReturnForm"),
+
+              ],
+              onChanged:(String? newValue){
+                setState(() {
+                  selectedAction = newValue;
+                });
+              },
+              value: selectedAction,
+            ),
+            TextButton(
+              child: Text("Action"),
+              onPressed: (){
+                setState(() {
+                  switch (selectedAction){
+                    case "Frogify":
+                      widget.player.race = races.firstWhere((element) => element.name == "Frog");
+                      widget.player.healthBefore =widget.player.health;
+                      widget.player.health = 5;
+                      widget.player.ac = 5;
+                      widget.player.hitChanceBonus = 0;
+                      widget.player.strengthBonus = 0;
+
+                      break;
+                    case "Revive":
+                      widget.player.health = widget.player.role.health;
+                      widget.player.ac = widget.player.role.ac;
+                      widget.player.hitChanceBonus = widget.player.role.hitChanceBonus;
+                      widget.player.strengthBonus = widget.player.role.strengthBonus;
+                      widget.player.race = widget.player.originalRace;
+                      break;
+                    case "ReturnForm":
+                        widget.player.race = widget.player.originalRace;
+                        widget.player.health = widget.player.healthBefore;
+                        widget.player.ac = widget.player.role.ac;
+                        widget.player.hitChanceBonus = widget.player.role.hitChanceBonus;
+                        widget.player.strengthBonus = widget.player.role.strengthBonus;
+                      break;
+                  }
+                });
+              },
+            ),
+            Container(
+              width: 100,
+              height: 50,
+              child: Center(child: Text("Extra info")),
+            ),
+            Container(
+              width: 500,
+              height: 200,
+              child: TextField(
+                controller: _ExtraInfoController,
+                onChanged: (String newValue){
+                  widget.player.extraInfo = newValue;
+                },
+                maxLines: null,
+              )
+            )
+          ]
+        ),
       )
     );
   }

@@ -1,16 +1,7 @@
 # dndwm
 
-A new Flutter project.
+Project that simplifies and supports anyone running DNDWolves.
 
-## Getting Started
+## Setup/Getting started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To import races, classes, and roles for further use, locate your persistent data directory (On Windows: `Documents/DNDWM`), and edit `data.json`.

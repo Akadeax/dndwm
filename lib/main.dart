@@ -12,62 +12,6 @@ import 'player_class.dart';
 import 'player_creation.dart';
 import 'role.dart';
 
-/*List<Race> races = [
-  Race("Dwarf", "", ["advantage on drinking const rolls"]),
-  Race("Elf", "", [""]),
-  Race("Half-Elf", "", [""]),
-  Race("Goliath", "", [""]),
-  Race("Owlin", "", ["temp flight"]),
-  Race("Tortle", "", [""]),
-  Race("Tiefling", "", [""]),
-  Race("Halfling", "", [""]),
-  Race("kobold", "", [""]),
-  Race("Human", "", [""]),
-  Race("Orc", "", [""]),
-  Race("Half-Orc", "", [""]),
-  Race("Changeling", "", ["change appearance"]),
-  Race("Locathah", "fish mf", ["aqua affinity"]),
-  Race("Gnome", "", [""]),
-  Race("Minotaur", "", [""]),
-  Race("Aaraockra", "bird mf", ["temp flight"]),
-  Race("Dragonborn", "", [""]),
-  Race("Lizardmen", "", [""]),
-  Race("Kenku", "", ["temp flight"]),
-  Race("Fae", "", [""]),
-  Race("Tabaski", "Lynx mf", [""]),
-  Race("Plasmoid", "", ["fit's through small holes"]),
-  Race("Loxedon", "elephant mf", [""]),
-  Race("Goblin", "", [""]),
-  Race("Satyr", "", [""]),
-  Race("other", "", [""]),
-  Race("Frog","Ribbit",["Ribbit"]),
-];
-List<PlayerClass> classes = [
-  PlayerClass("Monk","",[0,5,0,0,2,0],"Acrobatics"),
-  PlayerClass("Druid","",[0,0,2,0,5,0], "Animal Talk"),
-  PlayerClass("Warrior","",[2,2,2,0,0,0], "Athletics"),
-  PlayerClass("Barbarian","",[2,0,5,0,0,0], "survival"),
-  PlayerClass("Paladin","",[0,0,5,0,0,2], "persuasion"),
-  PlayerClass("Ranger","",[0,5,0,0,2,0], ""),
-  PlayerClass("Rogue","",[0,5,0,1,0,1], ""),
-  PlayerClass("Artificer","",[0,0,2,5,0,0], ""),
-  PlayerClass("Cleric","",[0,0,2,0,5,0], ""),
-  PlayerClass("Sorcerer","",[0,2,0,0,0,5], ""),
-  PlayerClass("Wizard","",[0,0,0,5,2,0], ""),
-  PlayerClass("Warlock","",[0,0,0,2,0,5], ""),
-  PlayerClass("Bard","",[0,2,0,0,0,5], ""),
-
-];
-List<Role> roles = [
-  Role("Werewolf",14,20,5,5),
-  Role("Seer",13,12,2,0),
-  Role("Witch",13,15,2,0),
-  Role("Eldest",10,12,4,0),
-  Role("Hunter",14,12,7,3),
-  Role("Cupid",9,10,1,-1),
-  Role("Villager",12,12,4,0),
-];*/
-
 void main() {
   runApp(const MyApp());
 }

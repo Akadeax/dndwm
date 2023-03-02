@@ -11,11 +11,11 @@ class Player{
     hitChanceBonus = role.hitChanceBonus;
     originalRace = race;
     healthBefore = role.health;
-    extraInfo = "put extra info here";
+    extraInfo = "";
   }
   String name;
   Race race;
-  Class playerClass;
+  PlayerClass playerClass;
   WerewolvesType role;
 
   late String extraInfo;

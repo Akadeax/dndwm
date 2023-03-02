@@ -5,13 +5,50 @@ import 'class.dart';
 import 'player.dart';
 import 'werewolves_type.dart';
 List<Race> races = [
-  Race("Dwarf", "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. Though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller", ["advantage on drinking const rolls"]),
-  Race("Elf", "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. Though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller", ["advantage on drinking const rolls"]),
+  Race("Dwarf", "", ["advantage on drinking const rolls"]),
+  Race("Elf", "", [""]),
+  Race("Half-Elf", "", [""]),
+  Race("Goliath", "", [""]),
+  Race("Owlin", "", ["temp flight"]),
+  Race("Tortle", "", [""]),
+  Race("Tiefling", "", [""]),
+  Race("Halfling", "", [""]),
+  Race("kobold", "", [""]),
+  Race("Human", "", [""]),
+  Race("Orc", "", [""]),
+  Race("Half-Orc", "", [""]),
+  Race("Changeling", "", ["change appearance"]),
+  Race("Locathah", "fish mf", ["aqua affinity"]),
+  Race("Gnome", "", [""]),
+  Race("Minotaur", "", [""]),
+  Race("Aaraockra", "bird mf", ["temp flight"]),
+  Race("Dragonborn", "", [""]),
+  Race("Lizardmen", "", [""]),
+  Race("Kenku", "", ["temp flight"]),
+  Race("Fae", "", [""]),
+  Race("Tabaski", "Lynx mf", [""]),
+  Race("Plasmoid", "", ["fit's through small holes"]),
+  Race("Loxedon", "elephant mf", [""]),
+  Race("Goblin", "", [""]),
+  Race("Satyr", "", [""]),
+  Race("other", "", [""]),
   Race("Frog","Ribbit",["Ribbit"]),
 ];
-List<Class> classes = [
-  Class("Monk","",[0,5,0,0,2,0],"Acrobatics"),
-  Class("Druid","",[0,0,2,0,5,0], "Animal Talk"),
+List<PlayerClass> classes = [
+  PlayerClass("Monk","",[0,5,0,0,2,0],"Acrobatics"),
+  PlayerClass("Druid","",[0,0,2,0,5,0], "Animal Talk"),
+  PlayerClass("Warrior","",[2,2,2,0,0,0], "Athletics"),
+  PlayerClass("Barbarian","",[2,0,5,0,0,0], "survival"),
+  PlayerClass("Paladin","",[0,0,5,0,0,2], "persuasion"),
+  PlayerClass("Ranger","",[0,5,0,0,2,0], ""),
+  PlayerClass("Rogue","",[0,5,0,1,0,1], ""),
+  PlayerClass("Artificer","",[0,0,2,5,0,0], ""),
+  PlayerClass("Cleric","",[0,0,2,0,5,0], ""),
+  PlayerClass("Sorcerer","",[0,2,0,0,0,5], ""),
+  PlayerClass("Wizard","",[0,0,0,5,2,0], ""),
+  PlayerClass("Warlock","",[0,0,0,2,0,5], ""),
+  PlayerClass("Bard","",[0,2,0,0,0,5], ""),
+
 ];
 List<WerewolvesType> roles = [
   WerewolvesType("Werewolf",14,20,5,5),
@@ -67,7 +104,7 @@ class _PlayerCreationState extends State<PlayerCreation> {
   }
   void onSubmit() {
     Race race = races.firstWhere((element) => element.name == selectedRace);
-    Class playerClass = classes.firstWhere((element) => element.name == selectedClass);
+    PlayerClass playerClass = classes.firstWhere((element) => element.name == selectedClass);
     WerewolvesType role = roles.firstWhere((element) => element.name == selectedRole);
     players.add(Player(_playerNameController.text, race, playerClass, role));
     setState(() {
@@ -209,6 +246,7 @@ class _GameState extends State<_Game> {
               return Row(
                 children:
                 [
+                  if (i == 0)
                   SizedBox(
                     height: 50, width: 100,
                     child: TextField(
@@ -308,27 +346,27 @@ class _PlayerPageState extends State<_PlayerPage> {
             ),
             Container(
               width: 100,
-              height: 50,
+              height: 30,
               child: Center(child: Text("health: ${widget.player.health}")),
             ),
             Container(
               width: 100,
-              height: 50,
+              height: 30,
               child: Center(child: Text("ac: ${widget.player.ac}")),
             ),
             Container(
               width: 200,
-              height: 50,
+              height: 30,
               child: Center(child: Text("hit chance bonus: ${widget.player.hitChanceBonus}")),
             ),
             Container(
               width: 100,
-              height: 50,
+              height: 30,
               child: Center(child: Text("Strength: ${widget.player.strengthBonus}")),
             ),
             Container(
-              width: 100,
-              height: 50,
+              width: 200,
+              height: 30,
               child: Center(child: Text("Class feature: ${widget.player.playerClass.feature}")),
             ),
 
@@ -336,7 +374,8 @@ class _PlayerPageState extends State<_PlayerPage> {
               items: const [
                 DropdownMenuItem(child: Text("Frogify"), value: "Frogify"),
                 DropdownMenuItem(child: Text("Revive"), value: "Revive"),
-                DropdownMenuItem(child: Text("ReturnForm"), value: "ReturnForm"),
+                DropdownMenuItem(child: Text("Return to original form"), value: "ReturnForm"),
+                DropdownMenuItem(child: Text("Is Mayor"), value: "IsMayor",)
 
               ],
               onChanged:(String? newValue){
@@ -373,6 +412,11 @@ class _PlayerPageState extends State<_PlayerPage> {
                         widget.player.ac = widget.player.role.ac;
                         widget.player.hitChanceBonus = widget.player.role.hitChanceBonus;
                         widget.player.strengthBonus = widget.player.role.strengthBonus;
+                      break;
+                    case "IsMayor":
+                      if (widget.player.ac<=widget.player.role.ac) {
+                        widget.player.ac += 4;
+                      }
                       break;
                   }
                 });
